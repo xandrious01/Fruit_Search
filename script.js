@@ -5,7 +5,7 @@ const fruit = ['Apple', 'Apricot', 'Avocado 🥑', 'Banana', 'Bilberry', 'Blackb
 
 function search(str) {
 	let results = [];
-	let filtered = fruit.map(item => item.toLowerCase()).filter(item => item.includes(str));
+	let filtered = fruit.map(item => item).filter(item => item.toLowerCase().includes(str));
 	if (filtered.length > 0) {
 		results = [...filtered];
 	}
@@ -18,18 +18,18 @@ suggestions.classList.add("has-suggestions");
 if (suggestions.children.length !== results.length) {
 	let toRemove = Array.from(suggestions.children).filter(item => !item.id.includes(inputVal));
 	toRemove.forEach(item => 
-		suggestions.removeChild(item.parentElement));
+		suggestions.removeChild(item));
 }
 results.forEach(item => {
 	if (document.getElementById(item) === null){
-	let div = document.createElement("div");
 	let listItem = document.createElement("li");
-	suggestions.appendChild(div);
-	div.appendChild(listItem);
-	listItem.id = item;
+	let itemDiv = document.createElement("div");
+	itemDiv.appendChild(listItem);
+	suggestions.appendChild(itemDiv);
+	itemDiv.id = item;
 	listItem.innerText = item;
-	listItem.classList.add("suggestion");
-	listItem.addEventListener("click", useSuggestion);
+	itemDiv.classList.add("list-item");
+	itemDiv.addEventListener("click", useSuggestion);
 	}
 })
 }
@@ -40,6 +40,10 @@ let str = e.target.value.trim().toLowerCase();
 if (str.length > 0) {
 	let results = search(str);
 	showSuggestions(results);
+} else if (str.length === 0) {
+	while (suggestions.children.length > 0) {
+		suggestions.removeChild(suggestions.lastElementChild);
+	}
 }
 }
 
